@@ -14,7 +14,7 @@ export const ProfileComponent = () => {
     <Container className="mb-5">
       <Row className="align-items-center profile-header mb-5 text-center text-md-left">
         <Col md={2}>
-          <Image
+          <img
             src={user.picture || "/profile_image.png"}
             alt="Profile"
             className="rounded-circle img-fluid profile-picture mb-3 mb-md-0"

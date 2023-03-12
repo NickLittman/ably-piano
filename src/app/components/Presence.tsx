@@ -1,4 +1,4 @@
-// create a component that renders presence data with the usePresence react Ably hook
+"use client";
 
 import React, { useEffect } from "react";
 import { usePresence } from "@ably-labs/react-hooks";
@@ -11,8 +11,9 @@ export default function Presence() {
   if (!user) throw new Error("no user");
 
   useEffect(() => {
-      updateStatus({ action: "enter", data: user.name});
-  }, []);
+    console.log("updateStatus firing")
+    updateStatus({ action: "enter", data: user.name});
+  }, [user]);
 
   return (
     <div>

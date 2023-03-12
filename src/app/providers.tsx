@@ -31,8 +31,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     clientId: process.env.NEXT_PUBLIC_CLIENT_ID,
     onRedirectCallback,
     authorizationParams: {
-    //@ts-expect-error
-      redirect_uri: typeof window !== undefined && window.location.origin,
+      redirect_uri: typeof window !== "undefined" ? window.location.origin : undefined,
       audience: process.env.NEXT_PUBLIC_AUDIENCE
     },
   };

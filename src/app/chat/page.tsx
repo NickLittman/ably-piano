@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import AblyChatComponent from "../components/AblyChatComponent";
@@ -12,8 +12,6 @@ import DrumPad from "../components/DrumPad";
 //   title: "Nick's Chat Page",
 //   description: "Look at me, chatting away!",
 // };
-
-
 
 function Chat() {
   const [loaded, setLoaded] = useState(false);
@@ -30,16 +28,17 @@ function Chat() {
       token: user["ably-token"],
     });
     setLoaded(true);
-    console.log(ably)
   }, []);
 
-
-  if (!loaded) return <div>loading...</div>;
   return (
     <div>
-      <DrumPad />
-      <AblyChatComponent />
-      <Presence />
+      {loaded && (
+        <>
+          <DrumPad />
+          <AblyChatComponent />
+          <Presence />
+        </>
+      )}
     </div>
   );
 }
