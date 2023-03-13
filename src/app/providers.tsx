@@ -1,6 +1,5 @@
 'use client';
 
-import "./globals.css";
 import {
   Auth0Provider,
   Auth0ProviderOptions,

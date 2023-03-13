@@ -91,9 +91,16 @@ export default function DrumPad() {
     // write a switch statement to return a new effect depending on the effect name
     switch (effect) {
       case "autoWah":
-        return new Tone.AutoWah(50, 6, -30).toDestination();
+        return new Tone.AutoWah({
+          baseFrequency: 100,
+          octaves: 6,
+          sensitivity: 0,
+        }).toDestination();
       case "vibrato":
-        return new Tone.Vibrato().toDestination();
+        return new Tone.Vibrato({
+          frequency: 5,
+          depth: 1,
+        }).toDestination();
       case "phaser":
         return new Tone.Phaser({
           frequency: 15,
@@ -101,11 +108,21 @@ export default function DrumPad() {
           baseFrequency: 1000,
         }).toDestination();
       case "tremolo":
-        return new Tone.Tremolo().toDestination();
+        return new Tone.Tremolo({
+          frequency: 10,
+          type: "sine",
+          depth: 0.5,
+        }).toDestination();
       case "reverb":
-        return new Tone.Reverb().toDestination();
+        return new Tone.Reverb({
+          decay: 4,
+          preDelay: 0.01,
+        }).toDestination();
       case "delay":
-        return new Tone.FeedbackDelay().toDestination();
+        return new Tone.FeedbackDelay({
+          delayTime: 0.25,
+          feedback: 0.5,
+        }).toDestination();
     }
   }
 
@@ -222,11 +239,13 @@ export default function DrumPad() {
       // clean up from tone js + remove : // create object, add to map, attach to tonejs
       const effect = createEffect(selected);
       selectedEffects.set(selected, effect);
+      setSelectedEffects(new Map(selectedEffects.set(selected, effect)));
       sampler.connect(effect);
     } else {
       console.debug("removing effect", selected)
       sampler.disconnect(selectedEffects.get(selected));
       selectedEffects.delete(selected);
+      setSelectedEffects(new Map(selectedEffects));
     }
   };
 
@@ -262,6 +281,12 @@ export default function DrumPad() {
           </Button>
         ))}
       </ButtonGroup>
+      <h5>Selected Filters</h5>
+      <ul>
+        {Array.from(selectedEffects.values()).map((selectedEffect, key) => (
+          <li key={key}>{selectedEffect.name}</li>
+        ))}
+      </ul>
     </>
   );
 }
