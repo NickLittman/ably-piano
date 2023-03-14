@@ -1,12 +1,19 @@
 "use client";
 import useKeyboardBindings from "./useKeyboardBindings";
 
-import { Modal, Button, ButtonGroup, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
+import {
+  Modal,
+  Button,
+  ButtonGroup,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "react-bootstrap";
 
 import { useChannel } from "@ably-labs/react-hooks";
 import { WebMidi } from "webmidi";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import * as Tone from "tone";
+import { Canvas, ThreeElements } from "@react-three/fiber";
 
 //import all mp3s from assets/sounds
 
@@ -18,6 +25,14 @@ const effectNames = [
   "reverb",
   "delay",
 ] as const;
+
+// function to generate a random x,y,z coordinates and return them wrapped in an object
+const randomPosition = () => {
+  const x = Math.random() * 2 - 1;
+  const y = Math.random() * 2 - 1;
+  const z = Math.random() * 2 - 1;
+  return { x, y, z };
+};
 
 type Effects = typeof effectNames[number];
 
@@ -33,6 +48,7 @@ export default function DrumPad() {
   const [selectedEffects, setSelectedEffects] = useState(
     new Map<Effects, Tone.ToneAudioNode>()
   );
+  const [noteNumber, setNoteNumber] = useState(0);
   const [sampler] = useState(
     new Tone.Sampler({
       urls: {
@@ -78,9 +94,29 @@ export default function DrumPad() {
 
   const [channel] = useChannel("drum-pad", (message) => {
     let { type, name, velocity, mode } = message.data;
+    console.info(message.data);
     if (type === "noteon") {
       console.info(type);
       sampler.triggerAttack(name);
+      const noteNames = [
+        "C",
+        "C#",
+        "D",
+        "D#",
+        "E",
+        "F",
+        "F#",
+        "G",
+        "G#",
+        "A",
+        "A#",
+        "B",
+      ];
+      const noteOctaves = [0, 1, 2, 3, 4, 5, 6];
+      const [noteName, noteOctave] = message.name.split(/(\d+)/); // split note name and octave from message name
+      const noteIndex = noteNames.indexOf(noteName);
+      const noteOctaveIndex = noteOctaves.indexOf(parseInt(noteOctave, 10));
+      setNoteNumber(noteIndex + noteOctaveIndex * 12);
     } else if (type === "noteoff") {
       console.info(type);
       sampler.triggerRelease(name, Tone.now());
@@ -181,75 +217,39 @@ export default function DrumPad() {
     setShow(true);
   }
 
-  useKeyboardBindings({
-    a: () => {
-      //   play({ id: "kick" });
-      channel.publish({
-        name: "drum-pad",
-        data: {
-          type: "noteon",
-          name: "C3",
-          velocity: 50,
-          mode: "keyboard",
-        },
-      });
-    },
-    s: () => {
-      //   play({ id: "hihat" });
-      channel.publish({
-        name: "drum-pad",
-        data: {
-          type: "noteon",
-          name: "D3",
-          velocity: 50,
-          mode: "keyboard",
-        },
-      });
-    },
-    d: () => {
-      //   play({ id: "snare" });
-      channel.publish({
-        name: "drum-pad",
-        data: {
-          type: "noteon",
-          name: "E3",
-          velocity: 50,
-          mode: "keyboard",
-        },
-      });
-    },
-    f: () => {
-      //   play({ id: "cowbell" });
-      channel.publish({
-        name: "drum-pad",
-        data: {
-          type: "noteon",
-          name: "F3",
-          velocity: 50,
-          mode: "keyboard",
-        },
-      });
-    },
-  });
-
   const onCheckboxBtnClick = (selected: Effects) => {
-    console.debug("onCheckboxBtnClick", selected, selectedEffects.has(selected))
+    console.debug(
+      "onCheckboxBtnClick",
+      selected,
+      selectedEffects.has(selected)
+    );
     if (!selectedEffects.has(selected)) {
-      console.debug("creating effect", selected)
+      console.debug("creating effect", selected);
       // clean up from tone js + remove : // create object, add to map, attach to tonejs
       const effect = createEffect(selected);
       selectedEffects.set(selected, effect);
       setSelectedEffects(new Map(selectedEffects.set(selected, effect)));
       sampler.connect(effect);
     } else {
-      console.debug("removing effect", selected)
+      console.debug("removing effect", selected);
       sampler.disconnect(selectedEffects.get(selected));
       selectedEffects.delete(selected);
       setSelectedEffects(new Map(selectedEffects));
     }
   };
 
-  const selectedEffectsNames = useMemo(() => Array.from(selectedEffects.keys()), [selectedEffects]);
+  // Tone.Transport.schedule((time) => {
+  //   Tone.Draw.schedule(() => {
+  //     // create an animation that renders a random color on each tick
+  //     const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+  //     return (<Circle />);
+  //   }, time);
+  // }, "0:0:0");
+
+  const selectedEffectsNames = useMemo(
+    () => Array.from(selectedEffects.keys()),
+    [selectedEffects]
+  );
 
   return (
     <>
@@ -267,20 +267,26 @@ export default function DrumPad() {
           </Button>
         </Modal.Footer>
       </Modal>
+      
 
-      <h5>Piano Filters</h5>
-      <ButtonGroup>
+      <Canvas>
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
+      </Canvas>
+
+      <h5 className="text-lg font-medium">Piano Filters</h5>
+      <div className="flex flex-wrap gap-2">
         {effectNames.map((effect) => (
-          <Button
+          <button
             key={effect}
-            variant="outline-primary"
+            className={`px-4 py-2 rounded-lg border-2 border-primary text-primary
+                  ${selectedEffects.has(effect) ? "bg-secondary" : ""}`}
             onClick={() => onCheckboxBtnClick(effect)}
-            active={selectedEffects.has(effect)}
           >
             {effect}
-          </Button>
+          </button>
         ))}
-      </ButtonGroup>
+      </div>
       <h5>Selected Filters</h5>
       <ul>
         {Array.from(selectedEffects.values()).map((selectedEffect, key) => (
