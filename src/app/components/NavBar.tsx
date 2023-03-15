@@ -16,27 +16,36 @@ const NavBar = () => {
       },
     });
 
-  const isReallyAuthenticated = isAuthenticated && user;
 
   return (
     <Navbar bg="light" expand="lg">
       <Navbar.Brand href="#">My App</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
+      <Navbar.Collapse
+        id="basic-navbar-nav"
+        className="justify-content-between"
+      >
         <Nav className="mr-auto">
           <Nav.Link as={Link} href="/">
             Home
           </Nav.Link>
-          {isReallyAuthenticated && (
-            <Nav.Link as={Link} href="/chat">
-              Chat
-            </Nav.Link>
+          {isAuthenticated && (
+            <>
+              <Nav.Link as={Link} href="loggedin/chat">
+                Chat
+              </Nav.Link>
+              <Nav.Link as={Link} href="loggedin/music">
+                Music
+              </Nav.Link>
+            </>
           )}
         </Nav>
         <Nav>
-          {isReallyAuthenticated ? (
+          {user ? (
             <NavDropdown
-              title={<img src={user.picture} alt="Profile" width={50} height={50}/>}
+              title={
+                <img src={user.picture} alt="Profile" width={50} height={50} />
+              }
             >
               <NavDropdown.Item as={Link} href="/profile">
                 Profile

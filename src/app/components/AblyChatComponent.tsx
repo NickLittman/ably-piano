@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useEffect, useState, useRef } from "react";
-import { useChannel, AblyMessageCallback } from "@ably-labs/react-hooks";
+import { useChannel } from "@ably-labs/react-hooks";
 import styles from "./AblyChatComponent.module.css";
 import { Types } from "ably";
 
@@ -49,9 +51,9 @@ export default function AblyChatComponent() {
     );
   });
 
-  useEffect(() => {
-    messageEnd.current?.scrollIntoView({ behavior: "smooth" });
-  });
+  // useEffect(() => {
+  //   messageEnd.current?.scrollIntoView({ behavior: "smooth" });
+  // });
 
   return (
     <div className={styles.chatHolder}>
