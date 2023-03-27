@@ -1,14 +1,11 @@
 "use client";
 import useKeyboardBindings from "./useKeyboardBindings";
 
-import {
-  Modal,
-  Button,
-} from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 
 import { useChannel } from "@ably-labs/react-hooks";
 import { WebMidi } from "webmidi";
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import * as Tone from "tone";
 import Piano from "../components/Piano";
 
@@ -23,7 +20,6 @@ const effectNames = [
   "delay",
 ] as const;
 
-
 type Effects = typeof effectNames[number];
 
 export default function DrumPad() {
@@ -35,14 +31,27 @@ export default function DrumPad() {
   );
   const [noteNumber, setNoteNumber] = useState(0);
 
-  const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  const notes = [
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "B",
+  ];
   const keys = new Map<string, boolean>();
 
   for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < notes.length; j++) {
-        keys.set(notes[j] + (i + 1), false);
+    for (let j = 0; j < notes.length; j++) {
+      keys.set(notes[j] + (i + 1), false);
+    }
   }
-}
   const [keyState, setKeyState] = useState(keys);
 
   const [sampler] = useState(
@@ -95,12 +104,12 @@ export default function DrumPad() {
       console.info(type);
       sampler.triggerAttack(name);
       setKeyState(new Map(keyState.set(name, true)));
-      console.log(keyState)
+      console.log(keyState);
     } else if (type === "noteoff") {
       console.info(type);
       sampler.triggerRelease(name, Tone.now());
       setKeyState(new Map(keyState.set(name, false)));
-      console.log(keyState)
+      console.log(keyState);
     }
   });
 
