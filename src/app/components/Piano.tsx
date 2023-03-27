@@ -98,8 +98,9 @@ const noteColors: NoteColors = {
   B7: "#AB5713",
 };
 
-export default function Piano(props: { state: Map<string, boolean> }) {
-  const [keyState, setKeyState] = useState(props.state);
+export default function Piano(props: { keyState: Map<string, boolean>, pianoCssState: Map<string, string> }) {
+  const [keyState, setKeyState] = useState(props.keyState);
+  const [pianoCssState, setPianoCssState] = useState(props.pianoCssState);
   // console.log(keyState);
   const notes = [
     "C",
@@ -117,7 +118,7 @@ export default function Piano(props: { state: Map<string, boolean> }) {
   ];
   const keys = [];
 
-  useEffect(() => {}, [props.state]);
+  useEffect(() => {}, [props.keyState]);
 
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < notes.length; j++) {
@@ -128,7 +129,7 @@ export default function Piano(props: { state: Map<string, boolean> }) {
     <div className="grid grid-cols-12 gap-4">
       {keys.map((key) => (
         <div
-          className={"col-span-1 bg-gray-200 p-4 border"}
+          className={pianoCssState.get(key)}
           key={key}
           id={key}
           style={{
