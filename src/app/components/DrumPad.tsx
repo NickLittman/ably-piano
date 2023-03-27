@@ -45,14 +45,17 @@ export default function DrumPad() {
     "A#",
     "B",
   ];
-  const keys = new Map<string, boolean>();
+  const initKeyState = new Map<string, boolean>();
+  const initPianoCssState = new Map<string, string>();
 
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < notes.length; j++) {
-      keys.set(notes[j] + (i + 1), false);
+      initKeyState.set(notes[j] + (i + 1), false);
+      initPianoCssState.set(notes[j] + (i + 1), "col-span-1 bg-gray-200 p-4 border");
     }
   }
-  const [keyState, setKeyState] = useState(keys);
+  const [keyState, setKeyState] = useState(initKeyState);
+  const [pianoCssState, setPianoCssState] = useState(initPianoCssState);
 
   const [sampler] = useState(
     new Tone.Sampler({
@@ -104,11 +107,13 @@ export default function DrumPad() {
       console.info(type);
       sampler.triggerAttack(name);
       setKeyState(new Map(keyState.set(name, true)));
+      setPianoCssState(new Map(pianoCssState.set(name, "col-span-1 bg-red-200 p-4 border animate-bounce")));
       console.log(keyState);
     } else if (type === "noteoff") {
       console.info(type);
       sampler.triggerRelease(name, Tone.now());
       setKeyState(new Map(keyState.set(name, false)));
+      setPianoCssState(new Map(pianoCssState.set(name, "col-span-1 bg-gray-200 p-4 border")));
       console.log(keyState);
     }
   });
@@ -265,7 +270,7 @@ export default function DrumPad() {
         ))}
       </ul>
       <h5>Piano</h5>
-      <Piano state={keyState} />
+      <Piano keyState={keyState} pianoCssState={pianoCssState} />
     </>
   );
 }
