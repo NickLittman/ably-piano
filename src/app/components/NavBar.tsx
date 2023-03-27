@@ -31,9 +31,9 @@ const NavBar = () => {
           </Nav.Link>
           {isAuthenticated && (
             <>
-              <Nav.Link as={Link} href="loggedin/chat">
+              {/* <Nav.Link as={Link} href="loggedin/chat">
                 Chat
-              </Nav.Link>
+              </Nav.Link> */}
               <Nav.Link as={Link} href="loggedin/music">
                 Music
               </Nav.Link>
