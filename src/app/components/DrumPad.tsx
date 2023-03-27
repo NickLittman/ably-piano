@@ -4,16 +4,13 @@ import useKeyboardBindings from "./useKeyboardBindings";
 import {
   Modal,
   Button,
-  ButtonGroup,
-  ToggleButton,
-  ToggleButtonGroup,
 } from "react-bootstrap";
 
 import { useChannel } from "@ably-labs/react-hooks";
 import { WebMidi } from "webmidi";
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState} from "react";
 import * as Tone from "tone";
-import { Canvas, ThreeElements } from "@react-three/fiber";
+import Piano from "../components/Piano";
 
 //import all mp3s from assets/sounds
 
@@ -26,29 +23,28 @@ const effectNames = [
   "delay",
 ] as const;
 
-// function to generate a random x,y,z coordinates and return them wrapped in an object
-const randomPosition = () => {
-  const x = Math.random() * 2 - 1;
-  const y = Math.random() * 2 - 1;
-  const z = Math.random() * 2 - 1;
-  return { x, y, z };
-};
 
 type Effects = typeof effectNames[number];
 
-// here is how you create a reverb effect
-// const reverb = new Tone.Reverb().toDestination();
-// sampler.connect(reverb);
-
 export default function DrumPad() {
   const [webMidi, setWebMidi] = useState<typeof WebMidi | null>(null);
-  // ISSUE: using an array to store notes causes issues because I'm reseting the entire array on noteoff
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState(true);
   const [selectedEffects, setSelectedEffects] = useState(
     new Map<Effects, Tone.ToneAudioNode>()
   );
   const [noteNumber, setNoteNumber] = useState(0);
+
+  const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  const keys = new Map<string, boolean>();
+
+  for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < notes.length; j++) {
+        keys.set(notes[j] + (i + 1), false);
+  }
+}
+  const [keyState, setKeyState] = useState(keys);
+
   const [sampler] = useState(
     new Tone.Sampler({
       urls: {
@@ -98,28 +94,13 @@ export default function DrumPad() {
     if (type === "noteon") {
       console.info(type);
       sampler.triggerAttack(name);
-      const noteNames = [
-        "C",
-        "C#",
-        "D",
-        "D#",
-        "E",
-        "F",
-        "F#",
-        "G",
-        "G#",
-        "A",
-        "A#",
-        "B",
-      ];
-      const noteOctaves = [0, 1, 2, 3, 4, 5, 6];
-      const [noteName, noteOctave] = message.name.split(/(\d+)/); // split note name and octave from message name
-      const noteIndex = noteNames.indexOf(noteName);
-      const noteOctaveIndex = noteOctaves.indexOf(parseInt(noteOctave, 10));
-      setNoteNumber(noteIndex + noteOctaveIndex * 12);
+      setKeyState(new Map(keyState.set(name, true)));
+      console.log(keyState)
     } else if (type === "noteoff") {
       console.info(type);
       sampler.triggerRelease(name, Tone.now());
+      setKeyState(new Map(keyState.set(name, false)));
+      console.log(keyState)
     }
   });
 
@@ -238,19 +219,6 @@ export default function DrumPad() {
     }
   };
 
-  // Tone.Transport.schedule((time) => {
-  //   Tone.Draw.schedule(() => {
-  //     // create an animation that renders a random color on each tick
-  //     const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-  //     return (<Circle />);
-  //   }, time);
-  // }, "0:0:0");
-
-  const selectedEffectsNames = useMemo(
-    () => Array.from(selectedEffects.keys()),
-    [selectedEffects]
-  );
-
   return (
     <>
       <Modal show={modal} onHide={modalHandler}>
@@ -267,12 +235,6 @@ export default function DrumPad() {
           </Button>
         </Modal.Footer>
       </Modal>
-      
-
-      <Canvas>
-        <ambientLight />
-        <pointLight position={[10, 10, 10]} />
-      </Canvas>
 
       <h5 className="text-lg font-medium">Piano Filters</h5>
       <div className="flex flex-wrap gap-2">
@@ -293,6 +255,8 @@ export default function DrumPad() {
           <li key={key}>{selectedEffect.name}</li>
         ))}
       </ul>
+      <h5>Piano</h5>
+      <Piano state={keyState} />
     </>
   );
 }

@@ -16,7 +16,7 @@ function LoggedIn() {
   return (
         <>
           <DrumPad />
-          <AblyChatComponent />
+          {/* <AblyChatComponent /> */}
           <Presence />
         </>
   );

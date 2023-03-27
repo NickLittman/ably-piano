@@ -5,7 +5,7 @@ import { Container, Row, Col } from "reactstrap";
 
 import Loading from "../components/Loading";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import Image from "next/image";
+// import Image from "next/image";
 
 export const ProfileComponent = () => {
   const { user } = useAuth0();
