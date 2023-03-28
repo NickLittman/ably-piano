@@ -5,7 +5,7 @@ import { Modal, Button } from "react-bootstrap";
 
 import { useChannel } from "@ably-labs/react-hooks";
 import { WebMidi } from "webmidi";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import * as Tone from "tone";
 import Piano from "../components/Piano";
 
@@ -22,6 +22,36 @@ const effectNames = [
 
 type Effects = typeof effectNames[number];
 
+type RenderingInfo = {
+  note: string;
+  velocity: number;
+  created: number;
+}
+
+const notes = [
+  "C",
+  "C#",
+  "D",
+  "D#",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "G#",
+  "A",
+  "A#",
+  "B",
+];
+const initKeyState = new Map<string, boolean>();
+const initPianoCssState = new Map<string, string>();
+
+for (let i = 0; i < 8; i++) {
+  for (let j = 0; j < notes.length; j++) {
+    initKeyState.set(notes[j] + (i + 1), false);
+    initPianoCssState.set(notes[j] + (i + 1), "col-span-1 bg-gray-200 p-4");
+  }
+}
+
 export default function DrumPad() {
   const [webMidi, setWebMidi] = useState<typeof WebMidi | null>(null);
   const [show, setShow] = useState(false);
@@ -31,31 +61,10 @@ export default function DrumPad() {
   );
   const [noteNumber, setNoteNumber] = useState(0);
 
-  const notes = [
-    "C",
-    "C#",
-    "D",
-    "D#",
-    "E",
-    "F",
-    "F#",
-    "G",
-    "G#",
-    "A",
-    "A#",
-    "B",
-  ];
-  const initKeyState = new Map<string, boolean>();
-  const initPianoCssState = new Map<string, string>();
-
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < notes.length; j++) {
-      initKeyState.set(notes[j] + (i + 1), false);
-      initPianoCssState.set(notes[j] + (i + 1), "col-span-1 bg-gray-200 p-4 border");
-    }
-  }
+  
   const [keyState, setKeyState] = useState(initKeyState);
   const [pianoCssState, setPianoCssState] = useState(initPianoCssState);
+  const [renderingQueue, setRenderingQueue] = useState<RenderingInfo[]>([]);
 
   const [sampler] = useState(
     new Tone.Sampler({
@@ -107,15 +116,21 @@ export default function DrumPad() {
       console.info(type);
       sampler.triggerAttack(name);
       setKeyState(new Map(keyState.set(name, true)));
-      setPianoCssState(new Map(pianoCssState.set(name, "col-span-1 bg-red-200 p-4 border animate-bounce")));
-      console.log(keyState);
+      setPianoCssState(new Map(pianoCssState.set(name, "col-span-1 bg-red-200 p-4 animate-bounce")));
+      const [, note, octave] = name.match(/([a-zA-Z]#?)(\d)/);
+      if (octave < 8 && octave > -1) setRenderingQueue((prevQueue) => [...prevQueue, { note: name, velocity: velocity, created: window.performance.now() }]);
+      // console.log(keyState);
     } else if (type === "noteoff") {
       console.info(type);
       sampler.triggerRelease(name, Tone.now());
       setKeyState(new Map(keyState.set(name, false)));
-      setPianoCssState(new Map(pianoCssState.set(name, "col-span-1 bg-gray-200 p-4 border")));
-      console.log(keyState);
+      setPianoCssState(new Map(pianoCssState.set(name, "col-span-1 bg-gray-200 p-4")));
+      // console.log(keyState);
     }
+  });
+
+  const removeQueueItem = useCallback((item: RenderingInfo) => {
+    setRenderingQueue((prevQueue) => prevQueue.filter((i) => i !== item));
   });
 
   function createEffect(effect: Effects) {
@@ -270,7 +285,7 @@ export default function DrumPad() {
         ))}
       </ul>
       <h5>Piano</h5>
-      <Piano keyState={keyState} pianoCssState={pianoCssState} />
+      <Piano keyState={keyState} pianoCssState={pianoCssState} renderingQueueState={renderingQueue} onRemoveQueueItem={removeQueueItem}/>
     </>
   );
 }
