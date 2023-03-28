@@ -6,17 +6,16 @@ import Loading from "../components/Loading";
 import Presence from "../components/Presence";
 import DrumPad from "../components/DrumPad";
 
-// export const metadata = {
-//   title: "Nick's Chat Page",
-//   description: "Look at me, chatting away!",
-// };
 
 function LoggedIn() {
 
   return (
         <>
+        <head>
+          <title>Logged In</title>
+        </head>
           <DrumPad />
-          <AblyChatComponent />
+          {/* <AblyChatComponent /> */}
           <Presence />
         </>
   );

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const NavBar = () => {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
@@ -31,9 +32,9 @@ const NavBar = () => {
           </Nav.Link>
           {isAuthenticated && (
             <>
-              <Nav.Link as={Link} href="loggedin/chat">
+              {/* <Nav.Link as={Link} href="loggedin/chat">
                 Chat
-              </Nav.Link>
+              </Nav.Link> */}
               <Nav.Link as={Link} href="loggedin/music">
                 Music
               </Nav.Link>
@@ -44,7 +45,8 @@ const NavBar = () => {
           {user ? (
             <NavDropdown
               title={
-                <img src={user.picture} alt="Profile" width={50} height={50} />
+                // <img src={user.picture} alt="Profile" width={50} height={50} />
+                <Image src={user.picture || "/profile_image.png"} alt="Profile" width={50} height={50} className="rounded-circle img-fluid profile-picture mb-3 mb-md-0" referrerPolicy="no-referrer" />
               }
             >
               <NavDropdown.Item as={Link} href="/profile">

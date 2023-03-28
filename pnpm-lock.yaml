@@ -7,6 +7,7 @@ specifiers:
   '@fortawesome/react-fontawesome': ^0.2.0
   '@popperjs/core': ^2.11.6
   '@react-three/fiber': ^8.12.0
+  '@react-three/flex': ^1.0.1
   '@types/jsonwebtoken': ^9.0.1
   '@types/node': 18.15.0
   '@types/react': 18.0.28
@@ -42,6 +43,7 @@ dependencies:
   '@fortawesome/react-fontawesome': 0.2.0_d5rbrisxfyemehbvmdbryvgjte
   '@popperjs/core': 2.11.6
   '@react-three/fiber': 8.12.0_73epb4osyabtjyiaeamriercbi
+  '@react-three/flex': 1.0.1_lfvpzd3m5escehi2gx2mx2fjgy
   '@types/jsonwebtoken': 9.0.1
   '@types/node': 18.15.0
   '@types/react': 18.0.28
@@ -368,6 +370,12 @@ packages:
       react: 18.2.0
     dev: false
 
+  /@react-pdf/yoga/2.0.4:
+    resolution: {integrity: sha512-bsU48GQ8E4LEQ38AtyQPQZ9oEATMpolGPFewgI4sBXOZBNH2miLtoBTbyB/xEOMuBcyqtvJQwSNg2czSZjrlyQ==}
+    dependencies:
+      '@types/yoga-layout': 1.9.4
+    dev: false
+
   /@react-three/fiber/8.12.0_73epb4osyabtjyiaeamriercbi:
     resolution: {integrity: sha512-o6DkNtNHqcOFRbxaiY5xayelE/9+Z0z9wWu5awqjVbc0c/1QM6AttJH6rKW0U/O6LWxSfxDTARXVzknZqpDJ7A==}
     peerDependencies:
@@ -401,6 +409,20 @@ packages:
       suspend-react: 0.0.8_react@18.2.0
       three: 0.150.1
       zustand: 3.7.2_react@18.2.0
+    dev: false
+
+  /@react-three/flex/1.0.1_lfvpzd3m5escehi2gx2mx2fjgy:
+    resolution: {integrity: sha512-m1zcuE0BWyUP6ASX09SGYZWHkyMS9GVcP4WGXjdSdxWi228D0p8hti9nHlnv+fpZvQO8v+Qz4EXmrf302mEzXQ==}
+    peerDependencies:
+      '@react-three/fiber': '>=8.0'
+      react: ^18.0.0
+      three: '>=0.137'
+    dependencies:
+      '@react-pdf/yoga': 2.0.4
+      '@react-three/fiber': 8.12.0_73epb4osyabtjyiaeamriercbi
+      react: 18.2.0
+      react-merge-refs: 1.1.0
+      three: 0.150.1
     dev: false
 
   /@remix-run/router/1.4.0:
@@ -554,6 +576,10 @@ packages:
 
   /@types/webxr/0.5.1:
     resolution: {integrity: sha512-xlFXPfgJR5vIuDefhaHuUM9uUgvPaXB6GKdXy2gdEh8gBWQZ2ul24AJz3foUd8NNKlSTQuWYJpCb1/pL81m1KQ==}
+    dev: false
+
+  /@types/yoga-layout/1.9.4:
+    resolution: {integrity: sha512-RRHc1+8Hc5mf/2lZKnom6kCnqcNS07s8keahniWTOva0KELF6RgDJmaEcvGEKUUJgN4UgessmEsWuidaOycIOw==}
     dev: false
 
   /@typescript-eslint/parser/5.55.0_vgl77cfdswitgr47lm5swmv43m:
@@ -2618,6 +2644,10 @@ packages:
 
   /react-lifecycles-compat/3.0.4:
     resolution: {integrity: sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==}
+    dev: false
+
+  /react-merge-refs/1.1.0:
+    resolution: {integrity: sha512-alTKsjEL0dKH/ru1Iyn7vliS2QRcBp9zZPGoWxUOvRGWPUYgjo+V01is7p04It6KhgrzhJGnIj9GgX8W4bZoCQ==}
     dev: false
 
   /react-popper/2.3.0_r6q5zrenym2zg7je7hgi674bti:
