@@ -7,7 +7,7 @@ import Loading from "../components/Loading";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import Image from "next/image";
 
-export function Profile() {
+function Profile() {
   const { user } = useAuth0();
   if (!user) throw new Error("no user");
   return (
