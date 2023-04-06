@@ -20,7 +20,7 @@ const NavBar = () => {
 
   return (
     <Navbar bg="light" expand="lg">
-      <Navbar.Brand href="#">My App</Navbar.Brand>
+      <Navbar.Brand href="#">Ably Piano</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse
         id="basic-navbar-nav"

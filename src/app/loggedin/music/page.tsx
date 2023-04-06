@@ -11,10 +11,10 @@ import DrumPad from "../../components/DrumPad";
 export default function Music() {
   return (
     <div>
-        <>
-          <DrumPad />
-          <Presence />
-        </>
+      <>
+        <Presence />
+        <DrumPad />
+      </>
     </div>
   );
 }

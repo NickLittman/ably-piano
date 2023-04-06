@@ -26,22 +26,9 @@ type RenderingInfo = {
   note: string;
   velocity: number;
   created: number;
-}
+};
 
-const notes = [
-  "C",
-  "C#",
-  "D",
-  "D#",
-  "E",
-  "F",
-  "F#",
-  "G",
-  "G#",
-  "A",
-  "A#",
-  "B",
-];
+const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const initKeyState = new Map<string, boolean>();
 const initPianoCssState = new Map<string, string>();
 
@@ -61,7 +48,6 @@ export default function DrumPad() {
   );
   const [noteNumber, setNoteNumber] = useState(0);
 
-  
   const [keyState, setKeyState] = useState(initKeyState);
   const [pianoCssState, setPianoCssState] = useState(initPianoCssState);
   const [renderingQueue, setRenderingQueue] = useState<RenderingInfo[]>([]);
@@ -116,22 +102,32 @@ export default function DrumPad() {
       console.info(type);
       sampler.triggerAttack(name);
       setKeyState(new Map(keyState.set(name, true)));
-      setPianoCssState(new Map(pianoCssState.set(name, "col-span-1 bg-red-200 p-4 animate-bounce")));
+      setPianoCssState(
+        new Map(
+          pianoCssState.set(name, "col-span-1 bg-red-200 p-4 animate-bounce")
+        )
+      );
       const [, note, octave] = name.match(/([a-zA-Z]#?)(\d)/);
-      if (octave < 8 && octave > -1) setRenderingQueue((prevQueue) => [...prevQueue, { note: name, velocity: velocity, created: window.performance.now() }]);
+      if (octave < 8 && octave > -1)
+        setRenderingQueue((prevQueue) => [
+          ...prevQueue,
+          { note: name, velocity: velocity, created: window.performance.now() },
+        ]);
       // console.log(keyState);
     } else if (type === "noteoff") {
       console.info(type);
       sampler.triggerRelease(name, Tone.now());
       setKeyState(new Map(keyState.set(name, false)));
-      setPianoCssState(new Map(pianoCssState.set(name, "col-span-1 bg-gray-200 p-4")));
+      setPianoCssState(
+        new Map(pianoCssState.set(name, "col-span-1 bg-gray-200 p-4"))
+      );
       // console.log(keyState);
     }
   });
 
   const removeQueueItem = useCallback((item: RenderingInfo) => {
     setRenderingQueue((prevQueue) => prevQueue.filter((i) => i !== item));
-  });
+  }, []);
 
   function createEffect(effect: Effects) {
     // write a switch statement to return a new effect depending on the effect name
@@ -265,27 +261,25 @@ export default function DrumPad() {
         </Modal.Footer>
       </Modal>
 
-      <h5 className="text-lg font-medium">Piano Filters</h5>
+      <h5 className="font-medium text-2xl">Piano Filters</h5>
       <div className="flex flex-wrap gap-2">
         {effectNames.map((effect) => (
           <button
             key={effect}
             className={`px-4 py-2 rounded-lg border-2 border-primary text-primary
-                  ${selectedEffects.has(effect) ? "bg-secondary" : ""}`}
+                  ${selectedEffects.has(effect) ? "bg-blue-400" : ""}`}
             onClick={() => onCheckboxBtnClick(effect)}
           >
             {effect}
           </button>
         ))}
       </div>
-      <h5>Selected Filters</h5>
-      <ul>
-        {Array.from(selectedEffects.values()).map((selectedEffect, key) => (
-          <li key={key}>{selectedEffect.name}</li>
-        ))}
-      </ul>
-      <h5>Piano</h5>
-      <Piano keyState={keyState} pianoCssState={pianoCssState} renderingQueueState={renderingQueue} onRemoveQueueItem={removeQueueItem}/>
+      <Piano
+        keyState={keyState}
+        pianoCssState={pianoCssState}
+        renderingQueueState={renderingQueue}
+        onRemoveQueueItem={removeQueueItem}
+      />
     </>
   );
 }

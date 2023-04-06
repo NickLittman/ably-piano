@@ -306,27 +306,7 @@ export default function Piano(props: {
     };
   }, [props.renderingQueueState, ctx]);
 
-  //   for (let i = 0; i < 8; i++) {
-  //     for (let j = 0; j < notes.length; j++) {
-  //       keys.push(notes[j] + (i + 1));
-  //     }
-  //   }
   return (
-    //     <div className="grid grid-cols-12 gap-4">
-    //       {keys.map((key) => (
-    //         <div
-    //           className={pianoCssState.get(key)}
-    //           key={key}
-    //           id={key}
-    //           style={{
-    //             backgroundColor:
-    //               keyState.get(key) === true ? noteColors[key] : "white",
-    //           }}
-    //         >
-    //           {/* {key} */}
-    //         </div>
-    //       ))}
-    //     </div>
     <canvas id="test" ref={canvas} width="1" height="500"></canvas>
   );
 }
