@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,274 +17,60 @@ const NavBar = () => {
 
 
   return (
-    <Navbar bg="light" expand="lg">
-      <Navbar.Brand href="#">Ably Piano</Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse
-        id="basic-navbar-nav"
-        className="justify-content-between"
-      >
-        <Nav className="mr-auto">
-          <Nav.Link as={Link} href="/">
-            Home
-          </Nav.Link>
+    <nav className="bg-white shadow-lg">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex justify-between h-16">
+      <div className="flex-shrink-0 flex items-center">
+        <a href="#" className="font-bold text-xl text-gray-800">Ably Piano</a>
+      </div>
+      <div className="hidden sm:block sm:ml-6">
+        <div className="flex space-x-4">
+          <a href="/" className="text-gray-600 hover:text-gray-900 font-medium">Home</a>
           {isAuthenticated && (
             <>
-              {/* <Nav.Link as={Link} href="loggedin/chat">
-                Chat
-              </Nav.Link> */}
-              <Nav.Link as={Link} href="loggedin/music">
-                Music
-              </Nav.Link>
+              {/* <a href="loggedin/chat" class="text-gray-600 hover:text-gray-900 font-medium">Chat</a> */}
+              <a href="loggedin/music" className="text-gray-600 hover:text-gray-900 font-medium">Music</a>
             </>
           )}
-        </Nav>
-        <Nav>
+        </div>
+      </div>
+      <div className="hidden sm:block">
+        <div className="flex items-center">
           {user ? (
-            <NavDropdown
-              title={
-                // <img src={user.picture} alt="Profile" width={50} height={50} />
-                <Image src={user.picture || "/profile_image.png"} alt="Profile" width={50} height={50} className="rounded-circle img-fluid profile-picture mb-3 mb-md-0" referrerPolicy="no-referrer" />
-              }
-            >
-              <NavDropdown.Item as={Link} href="/profile">
-                Profile
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item onClick={() => logoutWithRedirect()}>
-                Logout
-              </NavDropdown.Item>
-            </NavDropdown>
+            <div className="ml-3 relative">
+              <div>
+                <button className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out" id="user-menu" aria-label="User menu" aria-haspopup="true" aria-expanded="false" onClick={() => logoutWithRedirect()}>
+                  <img className="h-8 w-8 rounded-full" src={user.picture || "/profile_image.png"} alt="Profile" referrerPolicy="no-referrer" />
+                </button>
+              </div>
+              <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg">
+                <div className="py-1 rounded-md bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
+                  <a href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Profile</a>
+                  <div className="border-t border-gray-100"></div>
+                  <a href="#" onClick={() => logoutWithRedirect()} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Logout</a>
+                </div>
+              </div>
+            </div>
           ) : (
-            <Nav.Link onClick={() => loginWithRedirect()}>Login</Nav.Link>
+            <div className="ml-3">
+              <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline-blue active:bg-indigo-600 transition ease-in-out duration-150" onClick={() => loginWithRedirect()}>
+                Login
+              </button>
+            </div>
           )}
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
+        </div>
+      </div>
+      <div className="-mr-2 flex items-center sm:hidden">
+        <button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out" aria-label="Main menu" aria-expanded="false">
+          <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+            <path className="inline-flex" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  </nav>
   );
 };
 
 export default NavBar;
-
-// export default function NavBar({ props }: NavbarProps) {
-//   const [isOpen, setIsOpen] = useState(false);
-
-//   const toggle = () => setIsOpen(!isOpen);
-
-//   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-
-//   const logoutWithRedirect = () =>
-//     logout({
-//       logoutParams: {
-//         returnTo: window?.location.origin,
-//       },
-//     });
-
-//   const isReallyAuthenticated = isAuthenticated && user;
-
-//   const pages = [
-//     { name: "Home", href: "/", auth: false },
-//     { name: "Chat", href: "/chat", auth: true },
-//   ];
-
-//   return (
-//     <Navbar {...props}>
-//       <NavbarBrand href="/">ably thingy</NavbarBrand>
-//       <NavbarToggler onClick={toggle} />
-//       <Collapse isOpen={isOpen} navbar>
-//         <Nav className="me-auto" navbar>
-//           {pages.map(
-//             ({ name, href, auth }) =>
-//               auth && (
-//                 <NavItem key={name}>
-//                   <NavLink href={href} tag={Link}>
-//                     {name}
-//                   </NavLink>
-//                 </NavItem>
-//               )
-//           )}
-//           {!isReallyAuthenticated && (
-//             <NavItem>
-//               <Button
-//                 id="qsLoginBtn"
-//                 color="primary"
-//                 block
-//                 onClick={() => loginWithRedirect({})}
-//               >
-//                 Log in
-//               </Button>
-//             </NavItem>
-//           )}
-//           {isReallyAuthenticated && (
-//             <UncontrolledDropdown nav inNavbar>
-//               <DropdownToggle nav caret>
-//                 <img
-//                   src={user.picture}
-//                   alt="Profile"
-//                   className="nav-user-profile rounded-circle"
-//                   width="50"
-//                   height="50"
-//                 />
-//               </DropdownToggle>
-//               <DropdownMenu>
-//                 <DropdownItem header>{user.name}</DropdownItem>
-//                 <DropdownItem
-//                   tag={Link}
-//                   href="/profile"
-//                   className="dropdown-profile"
-//                   activeClassName="router-link-exact-active"
-//                 >
-//                   <FontAwesomeIcon icon="user" className="mr-3" /> Profile
-//                 </DropdownItem>
-//                 <DropdownItem onClick={() => logoutWithRedirect()}>
-//                   <FontAwesomeIcon icon="power-off" className="mr-3" /> Log out
-//                 </DropdownItem>
-//               </DropdownMenu>
-//             </UncontrolledDropdown>
-//           )}
-//         </Nav>
-//       </Collapse>
-//     </Navbar>
-//   );
-// }
-
-// const NavBar = () => {
-//   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-
-//   const [isOpen, setIsOpen] = useState(false);
-//   const toggle = () => setIsOpen(!isOpen);
-
-//   const logoutWithRedirect = () =>
-//     logout({
-//       logoutParams: {
-//         returnTo: window?.location.origin,
-//       },
-//     });
-
-//   const isReallyAuthenticated = isAuthenticated && user;
-
-//   return (
-//     <div className="nav-container">
-//       <Navbar color="light" light expand="md">
-//         <Container>
-//           <NavbarBrand className="logo" />
-//           <NavbarToggler onClick={toggle} />
-//           <Collapse isOpen={isOpen} navbar>
-//             <Nav className="mr-auto" navbar>
-//               <NavItem>
-//                 <NavLink tag={Link} href="/">
-//                   Home
-//                 </NavLink>
-//               </NavItem>
-//               {isReallyAuthenticated && (
-//                 <NavItem>
-//                   <Link href="/chat">
-//                     <NavLink>Chat</NavLink>
-//                   </Link>
-//                 </NavItem>
-//               )}
-//             </Nav>
-//             <Nav className="d-none d-md-block" navbar>
-//               {!isReallyAuthenticated && (
-//                 <NavItem>
-//                   <Button
-//                     id="qsLoginBtn"
-//                     color="primary"
-//                     className="btn-margin"
-//                     onClick={() => loginWithRedirect()}
-//                   >
-//                     Log in
-//                   </Button>
-//                 </NavItem>
-//               )}
-//               {isReallyAuthenticated && (
-//                 <UncontrolledDropdown nav inNavbar>
-//                   <DropdownToggle nav caret id="profileDropDown">
-//                     <img
-//                       src={user.picture}
-//                       alt="Profile"
-//                       className="nav-user-profile rounded-circle"
-//                       width="50"
-//                       height="50"
-//                     />
-//                   </DropdownToggle>
-//                   <DropdownMenu>
-//                     <DropdownItem header>{user.name}</DropdownItem>
-//                     <DropdownItem
-//                       tag={Link}
-//                       href="/profile"
-//                       className="dropdown-profile"
-//                       activeClassName="router-link-exact-active"
-//                     >
-//                       <FontAwesomeIcon icon="user" className="mr-3" /> Profile
-//                     </DropdownItem>
-//                     <DropdownItem
-//                       id="qsLogoutBtn"
-//                       onClick={() => logoutWithRedirect()}
-//                     >
-//                       <FontAwesomeIcon icon="power-off" className="mr-3" /> Log
-//                       out
-//                     </DropdownItem>
-//                   </DropdownMenu>
-//                 </UncontrolledDropdown>
-//               )}
-//             </Nav>
-//             {!isReallyAuthenticated && (
-//               <Nav className="d-md-none" navbar>
-//                 <NavItem>
-//                   <Button
-//                     id="qsLoginBtn"
-//                     color="primary"
-//                     block
-//                     onClick={() => loginWithRedirect({})}
-//                   >
-//                     Log in
-//                   </Button>
-//                 </NavItem>
-//               </Nav>
-//             )}
-//             {isReallyAuthenticated && (
-//               <Nav
-//                 className="d-md-none justify-content-between"
-//                 navbar
-//                 style={{ minHeight: 170 }}
-//               >
-//                 <NavItem>
-//                   <span className="user-info">
-//                     <img
-//                       src={user.picture || "/profile_image.png"}
-//                       alt="Profile"
-//                       className="nav-user-profile d-inline-block rounded-circle mr-3"
-//                       width="50"
-//                       height="50"
-//                     />
-//                     <h6 className="d-inline-block">{user.name}</h6>
-//                   </span>
-//                 </NavItem>
-//                 <NavItem>
-//                   <FontAwesomeIcon icon="user" className="mr-3" />
-//                   <NavLink tag={Link} href="/profile">
-//                     Profile
-//                   </NavLink>
-//                 </NavItem>
-//                 <NavItem>
-//                   <FontAwesomeIcon icon="power-off" className="mr-3" />
-//                   {/* this is a fake link */}
-//                   <NavLink
-//                     to="#"
-//                     id="qsLogoutBtn"
-//                     onClick={() => logoutWithRedirect()}
-//                   >
-//                     Log out
-//                   </NavLink>
-//                 </NavItem>
-//               </Nav>
-//             )}
-//           </Collapse>
-//         </Container>
-//       </Navbar>
-//     </div>
-//   );
-// };
-
-// export default NavBar;

@@ -281,10 +281,9 @@ export default function Piano(props: {
         let alpha = 1 - age / fadeDuration;
         ctx.fillStyle = `hsla(${noteColor.h}, ${noteColor.s}%, ${noteColor.l}%, ${alpha})`;
         // use the item.note to determine a value between 1 and 96 - 1 is C1, 96 is B7
-        const [, note, octave] = item.note.match(/([a-zA-Z]#?)(\d)/);
-
+        const [,note, octave] = item.note.match(/([a-zA-Z]#?)(\d)/) || [];
         const noteIndex = notes.indexOf(note);
-        const position = noteIndex + 12 * octave;
+        const position = noteIndex + 12 * parseInt(octave);
         const margin = 100;
 
         ctx.save();
