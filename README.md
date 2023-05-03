@@ -14,23 +14,23 @@
 <p>To run this project locally, follow these steps:</p>
 <ol>
   <li>Clone the repository: <code>git clone https://github.com/your-username/your-repo.git</code></li>
-  <li>Install dependencies: <code>npm install</code></li>
+  <li>Install dependencies: <code>pnpm install</code></li>
   <li>Create a free account on Ably and get your API key.</li>
   <li>Create a free account on Auth0 and get your client ID and secret.</li>
   <li>Create a <code>.env.local</code> file in the root of your project with the following variables:</li>
   <code>
-  NEXT_PUBLIC_ABLY_API_KEY=&lt;your-ably-api-key&gt;<br>
-  AUTH0_CLIENT_ID=&lt;your-auth0-client-id&gt;<br>
+  AUTH0_SCOPE='openid profile email read:shows'
+  ABLY_AUTH_TOKEN=&lt;your-ably-api-key&gt;<br>
   AUTH0_CLIENT_SECRET=&lt;your-auth0-client-secret&gt;<br>
   AUTH0_DOMAIN=&lt;your-auth0-domain&gt;<br>
+  NEXT_PUBLIC_DOMAIN=&lt;your-auth0-domain&gt;<br>
+  NEXT_PUBLIC_CLIENT_ID=&lt;your-auth0-client-id&gt;<br>
+  NEXT_PUBLIC_AUDIENCE=&lt;your-auth0-audience&gt;<br>
+  NEXT_PUBLIC_APP_ORIGIN=&lt;your-configured-auth0-app-origin&gt;<br>
   </code>
   <li>Run the development server: <code>npm run dev</code></li>
   <li>Open your browser and go to <code>http://localhost:3000</code></li>
 </ol>
-<h2>Demo</h2>
-<p>You can see a live demo of this project at <a href="https://your-demo-url.com">https://your-demo-url.com</a>.</p>
-<h2>Acknowledgements</h2>
-<p>This project was inspired by <a href="https://www.ably.io/blog/ably-powered-collaborative-piano/">this article</a> on Ably's blog.</p>
 <h2>License</h2>
 <p>This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for more information.</p>
 
