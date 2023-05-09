@@ -13,7 +13,7 @@
 <h2>Getting Started</h2>
 <p>To run this project locally, follow these steps:</p>
 <ol>
-  <li>Clone the repository: <code>git clone https://github.com/your-username/your-repo.git</code></li>
+  <li>Clone the repository: <code>git clone https://github.com/NickLittman/ably-piano.git</code></li>
   <li>Install dependencies: <code>pnpm install</code></li>
   <li>Create a free account on Ably and get your API key.</li>
   <li>Create a free account on Auth0 and get your client ID and secret.</li>
